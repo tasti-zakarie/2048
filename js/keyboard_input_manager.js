@@ -35,17 +35,17 @@ KeyboardInputManager.prototype.listen = function () {
   var self = this;
 
   var map = {
-    38: 2, // Up
+    38: 0, // Up
     39: 1, // Right
-    40: 0, // Down
+    40: 2, // Down
     37: 3, // Left
-    75: 2, // Vim up
+    75: 0, // Vim up
     76: 1, // Vim right
-    74: 0, // Vim down
+    74: 2, // Vim down
     72: 3, // Vim left
-    87: 2, // W
+    87: 0, // W
     68: 1, // D
-    83: 0, // S
+    83: 2, // S
     65: 3  // A
   };
 
