@@ -41,12 +41,14 @@ HTMLActuator.prototype.continueGame = function () {
 };
 
 HTMLActuator.prototype.clearContainer = function (container) {
+  /*
   while (container.firstChild) {
     container.removeChild(container.firstChild);
-  }
+  } */
 };
 
 HTMLActuator.prototype.addTile = function (tile) {
+  /*
   var self = this;
 
   var wrapper   = document.createElement("div");
@@ -88,6 +90,7 @@ HTMLActuator.prototype.addTile = function (tile) {
 
   // Put the tile on the board
   this.tileContainer.appendChild(wrapper);
+  */
 };
 
 HTMLActuator.prototype.applyClasses = function (element, classes) {

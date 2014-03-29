@@ -1,6 +1,7 @@
 function Tile(position, value) {
   this.x                = position.x;
   this.y                = position.y;
+  //this.z                = position.z;
   this.value            = value || 2;
 
   this.previousPosition = null;

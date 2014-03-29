@@ -11,6 +11,7 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.inputManager.on("keepPlaying", this.keepPlaying.bind(this));
 
   this.setup();
+  this.setup_graphics();
 }
 
 // Restart the game
@@ -18,6 +19,7 @@ GameManager.prototype.restart = function () {
   this.storageManager.clearGameState();
   this.actuator.continueGame(); // Clear the game won/lost message
   this.setup();
+  this.setup_graphics();
 };
 
 // Keep playing after winning (allows going over 2048)
@@ -61,6 +63,50 @@ GameManager.prototype.setup = function () {
   // Update the actuator
   this.actuate();
 };
+GameManager.prototype.animate = function() {
+        requestAnimationFrame($.proxy(this.animate, this));
+
+        //this.mesh.rotation.x += 0.0005;
+        //this.mesh.rotation.y += 0.0001;
+
+        this.renderer.render( this.scene, this.camera ); 
+  }
+
+GameManager.prototype.setup_graphics = function () {
+  this.camera     = null;
+  this.scene      = null;
+  this.mesh       = null;
+
+  var tile_container = $(".tile-container");
+  var x = 470, y = 470;
+
+  this.renderer = new THREE.WebGLRenderer();
+  this.renderer.setSize( x, y );
+  tile_container.append( this.renderer.domElement );
+
+  this.camera = new THREE.PerspectiveCamera( 70, x / y, 1, 1000 );
+  this.camera.position.z = 400;
+
+  this.scene = new THREE.Scene();
+  var geometry = new THREE.BoxGeometry( 200, 200, 200 );
+  //var texture = THREE.ImageUtils.loadTexture( 'textures/crate.gif' );
+
+  var material = new THREE.MeshBasicMaterial( {color:0xff000, wireframe: true, vertexColors: THREE.VertexColors} );
+
+  this.mesh = new THREE.Mesh( geometry, material );
+  this.scene.add( this.mesh );
+
+  window.addEventListener( 'resize', onWindowResize, false );
+  function onWindowResize() {
+    camera.aspect = x / y;
+    camera.updateProjectionMatrix();
+
+    this.renderer.setSize( x, y);
+  }
+
+  this.animate();
+}
+
 
 // Set up the initial tiles to start the game with
 GameManager.prototype.addStartTiles = function () {
@@ -133,6 +179,7 @@ GameManager.prototype.moveTile = function (tile, cell) {
 // Move tiles on the grid in the specified direction
 GameManager.prototype.move = function (direction) {
   // 0: up, 1: right, 2: down, 3: left
+
   var self = this;
 
   if (this.isGameTerminated()) return; // Don't do anything if the game's over
@@ -181,12 +228,12 @@ GameManager.prototype.move = function (direction) {
         }
       }
     });
-  });
+});
 
-  if (moved) {
-    this.addRandomTile();
+if (moved) {
+  this.addRandomTile();
 
-    if (!this.movesAvailable()) {
+  if (!this.movesAvailable()) {
       this.over = true; // Game over!
     }
 
@@ -231,7 +278,7 @@ GameManager.prototype.findFarthestPosition = function (cell, vector) {
     previous = cell;
     cell     = { x: previous.x + vector.x, y: previous.y + vector.y };
   } while (this.grid.withinBounds(cell) &&
-           this.grid.cellAvailable(cell));
+   this.grid.cellAvailable(cell));
 
   return {
     farthest: previous,
